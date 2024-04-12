@@ -1,0 +1,43 @@
+import csv
+from multiprocessing import connection
+import sys
+import netmiko
+import re
+import getpass
+
+from datetime import datetime
+from netmiko import ConnectHandler
+from getpass import getpass
+
+with open ('device.txt') as f:
+    Device_List = f.read().splitlines()
+
+for Devices in Device_List:
+    print("Connecting to ", Devices)
+    print("===========================================")
+    username = "username"
+    password = "password"
+    ip_address = Devices
+
+    
+    switch = {'device_type': 'cisco_ios','host': ip_address,'username': username,'password': password}
+
+    connection = ConnectHandler(**switch)
+
+
+    #routes = connection.send_command('show int desc')
+    #print("==routes data===")
+    #print (routes)
+    
+    description = ['interface Fa0/8',
+                               'description ** Printer ***',
+                               'exit',]
+    output = connection.send_config_set(description)
+
+    print(output)
+
+    #intgi2_1 = connection.send_command('show run int gi2/1')
+    #print("==Gi 2-1===")
+    #print (intgi2_1)
+
+    connection.disconnect()
